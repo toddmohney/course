@@ -31,9 +31,8 @@ import qualified Numeric as N
 -- BEGIN Helper functions and data types
 
 -- The custom list type
-data List t =
-  Nil
-  | t :. List t
+data List t = Nil 
+            | t :. List t
   deriving (Eq, Ord)
 
 -- Right-associative
@@ -43,8 +42,7 @@ instance Show t => Show (List t) where
   show = show . foldRight (:) []
 
 -- The list of integers from zero to infinity.
-infinity ::
-  List Integer
+infinity :: List Integer
 infinity =
   let inf x = x :. inf (x+1)
   in inf 0
@@ -71,12 +69,10 @@ foldLeft f b (h :. t) = let b' = f b h in b' `seq` foldLeft f b' t
 -- prop> x `headOr` infinity == 0
 --
 -- prop> x `headOr` Nil == x
-headOr ::
-  a
-  -> List a
-  -> a
-headOr =
-  error "todo: Course.List#headOr"
+headOr :: a -> List a -> a
+headOr a Nil      = a
+headOr _ (h :. _) = h
+
 
 -- | The product of the elements of a list.
 --
@@ -85,11 +81,9 @@ headOr =
 --
 -- >>> product (1 :. 2 :. 3 :. 4 :. Nil)
 -- 24
-product ::
-  List Int
-  -> Int
-product =
-  error "todo: Course.List#product"
+product :: List Int -> Int
+product = foldRight (*) 1
+
 
 -- | Sum the elements of the list.
 --
@@ -100,11 +94,9 @@ product =
 -- 10
 --
 -- prop> foldLeft (-) (sum x) x == 0
-sum ::
-  List Int
-  -> Int
-sum =
-  error "todo: Course.List#sum"
+sum :: List Int -> Int
+sum = foldRight (+) 0
+  
 
 -- | Return the length of the list.
 --
@@ -112,11 +104,9 @@ sum =
 -- 3
 --
 -- prop> sum (map (const 1) x) == length x
-length ::
-  List a
-  -> Int
-length =
-  error "todo: Course.List#length"
+length :: List a -> Int
+length = foldLeft (const . succ) 0
+
 
 -- | Map the given function on each element of the list.
 --
@@ -126,12 +116,9 @@ length =
 -- prop> headOr x (map (+1) infinity) == 1
 --
 -- prop> map id x == x
-map ::
-  (a -> b)
-  -> List a
-  -> List b
-map =
-  error "todo: Course.List#map"
+map :: (a -> b) -> List a -> List b
+map _ Nil      = Nil
+map f (h :. t) = (f h) :. (map f t)
 
 -- | Return elements satisfying the given predicate.
 --
