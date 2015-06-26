@@ -213,11 +213,9 @@ flattenAgain = flatMap id
 --
 -- >>> seqOptional (Empty :. map Full infinity)
 -- Empty
-seqOptional ::
-  List (Optional a)
-  -> Optional (List a)
-seqOptional =
-  error "todo: Course.List#seqOptional"
+seqOptional :: List (Optional a) -> Optional (List a)
+seqOptional = foldRight (twiceOptional (:.)) (Full Nil)
+
 
 -- | Find the first element in the list matching the predicate.
 --
@@ -235,12 +233,12 @@ seqOptional =
 --
 -- >>> find (const True) infinity
 -- Full 0
-find ::
-  (a -> Bool)
-  -> List a
-  -> Optional a
-find =
-  error "todo: Course.List#find"
+find :: (a -> Bool) -> List a -> Optional a
+find f a = 
+  case filter f a of
+    Nil    -> Empty
+    h :. _ -> (Full h)
+
 
 -- | Determine if the length of the given list is greater than 4.
 --
@@ -255,11 +253,11 @@ find =
 --
 -- >>> lengthGT4 infinity
 -- True
-lengthGT4 ::
-  List a
-  -> Bool
-lengthGT4 =
-  error "todo: Course.List#lengthGT4"
+lengthGT4 :: List a -> Bool
+lengthGT4 list
+  | (length list) > 4 = True
+  | otherwise         = False
+
 
 -- | Reverse a list.
 --
@@ -272,11 +270,9 @@ lengthGT4 =
 -- prop> let types = x :: List Int in reverse x ++ reverse y == reverse (y ++ x)
 --
 -- prop> let types = x :: Int in reverse (x :. Nil) == x :. Nil
-reverse ::
-  List a
-  -> List a
-reverse =
-  error "todo: Course.List#reverse"
+reverse :: List a -> List a
+reverse = foldLeft (flip (:.)) Nil
+
 
 -- | Produce an infinite `List` that seeds with the given value at its head,
 -- then runs the given function for subsequent elements
