@@ -254,9 +254,8 @@ find f a =
 -- >>> lengthGT4 infinity
 -- True
 lengthGT4 :: List a -> Bool
-lengthGT4 list
-  | (length list) > 4 = True
-  | otherwise         = False
+lengthGT4 (_:._:._:._:._) = True
+lengthGT4 _               = False
 
 
 -- | Reverse a list.
@@ -295,9 +294,8 @@ produce f a = (a :. (produce f (f a)))
 -- prop> let types = x :: List Int in notReverse x ++ notReverse y == notReverse (y ++ x)
 --
 -- prop> let types = x :: Int in notReverse (x :. Nil) == x :. Nil
-{- notReverse :: List a -> List a -}
-{- notReverse = -}
-  {- error "todo: Is it even possible?" -}
+notReverse :: List a -> List a
+notReverse = reverse
 
 ---- End of list exercises
 
