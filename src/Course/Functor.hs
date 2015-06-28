@@ -65,12 +65,8 @@ instance Functor Optional where
 -- >>> ((+1) <$> (*2)) 8
 -- 17
 instance Functor ((->) t) where
-  (<$>) ::
-    (a -> b)
-    -> ((->) t a)
-    -> ((->) t b)
-  (<$>) =
-    error "todo: Course.Functor (<$>)#((->) t)"
+  (<$>) :: (a -> b) -> ((->) t a) -> ((->) t b)
+  (<$>) = (.)
 
 -- | Anonymous map. Maps a constant value on a functor.
 --
@@ -80,13 +76,8 @@ instance Functor ((->) t) where
 -- prop> x <$ [a,b,c] == [x,x,x]
 --
 -- prop> x <$ Full q == Full x
-(<$) ::
-  Functor f =>
-  a
-  -> f b
-  -> f a
-(<$) =
-  error "todo: Course.Functor#(<$)"
+(<$) :: Functor f => a -> f b -> f a
+(<$) a b = const a <$> b
 
 -- | Anonymous map producing unit value.
 --
@@ -101,12 +92,8 @@ instance Functor ((->) t) where
 --
 -- >>> void (+10) 5
 -- ()
-void ::
-  Functor f =>
-  f a
-  -> f ()
-void =
-  error "todo: Course.Functor#void"
+void :: Functor f => f a -> f ()
+void a = () <$ a
 
 -----------------------
 -- SUPPORT LIBRARIES --
