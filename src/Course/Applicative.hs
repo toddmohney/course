@@ -41,53 +41,38 @@ class Apply f => Applicative f where
 --
 -- >>> (+1) <$> (1 :. 2 :. 3 :. Nil)
 -- [2,3,4]
-(<$>) ::
-  Applicative f =>
-  (a -> b)
-  -> f a
-  -> f b
-(<$>) =
-  error "todo: Course.Applicative#(<$>)"
+(<$>) :: Applicative f => (a -> b) -> f a -> f b
+a <$> b = pure a <*> b
 
 -- | Insert into Id.
 --
 -- prop> pure x == Id x
 instance Applicative Id where
-  pure ::
-    a
-    -> Id a
-  pure =
-    error "todo: Course.Applicative pure#instance Id"
+  pure :: a -> Id a
+  pure = Id
 
 -- | Insert into a List.
 --
 -- prop> pure x == x :. Nil
 instance Applicative List where
-  pure ::
-    a
-    -> List a
-  pure =
-    error "todo: Course.Applicative pure#instance List"
+  pure :: a -> List a
+  pure a = (a :. Nil)
+
 
 -- | Insert into an Optional.
 --
 -- prop> pure x == Full x
 instance Applicative Optional where
-  pure ::
-    a
-    -> Optional a
-  pure =
-    error "todo: Course.Applicative pure#instance Optional"
+  pure :: a -> Optional a
+  pure = Full
+
 
 -- | Insert into a constant function.
 --
 -- prop> pure x y == x
 instance Applicative ((->) t) where
-  pure ::
-    a
-    -> ((->) t a)
-  pure =
-    error "todo: Course.Applicative pure#((->) t)"
+  pure :: a -> ((->) t a)
+  pure = const
 
 -- | Sequences a list of structures to a structure of list.
 --
@@ -105,12 +90,9 @@ instance Applicative ((->) t) where
 --
 -- >>> sequence ((*10) :. (+2) :. Nil) 6
 -- [60,8]
-sequence ::
-  Applicative f =>
-  List (f a)
-  -> f (List a)
-sequence =
-  error "todo: Course.Applicative#sequence"
+sequence :: Applicative f => List (f a) -> f (List a)
+sequence = foldRight (lift2 (:.)) (pure Nil)
+
 
 -- | Replicate an effect a given number of times.
 --
@@ -128,11 +110,7 @@ sequence =
 --
 -- >>> replicateA 3 ['a', 'b', 'c']
 -- ["aaa","aab","aac","aba","abb","abc","aca","acb","acc","baa","bab","bac","bba","bbb","bbc","bca","bcb","bcc","caa","cab","cac","cba","cbb","cbc","cca","ccb","ccc"]
-replicateA ::
-  Applicative f =>
-  Int
-  -> f a
-  -> f (List a)
+replicateA :: Applicative f => Int -> f a -> f (List a)
 replicateA =
   error "todo: Course.Applicative#replicateA"
 

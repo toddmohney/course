@@ -72,8 +72,8 @@ instance Apply Optional where
 -- 15
 instance Apply ((->) t) where
   (<*>) :: ((->) t (a -> b)) -> ((->) t a) -> ((->) t b)
-  (<*>) =
-    error "todo: Course.Apply (<*>)#instance ((->) t)"
+  (<*>) f g = (\x -> f x (g x))
+
 
 -- | Apply a binary function in the environment.
 --
